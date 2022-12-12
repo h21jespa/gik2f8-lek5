@@ -45,7 +45,31 @@ app.post("/task", async (req, res) => {
     await fs.writeFile('./tasks.json', JSON.stringify(newList));
     res.send(newTask);
   } catch(error){
+        res.status(500).send({ error : error.stack });
+     }
+});
+
+app.delete("/task/:id", async (req , res) => {
+    try{
+        const id = req.params.id;
+        const listBuffer = await fs.readFile('./tasks.json');
+        const currentTasks = JSON.parse(listBuffer);
+        if(currentTasks.length > 0) {
+            await fs.writeFile(
+                './tasks.json', 
+            JSON.stringify(currentTasks.filter((task)  => task.id != id))
+            );
+            res.send({  message: `Uppgift med id ${id} togs bort`});
+
+        } else {
+            res.status(404).send({ error: 'Ingen uppgift att ta bort' });
+        }
+
+    }
+    catch(error){
         res.status(500).send({ error });
      }
+
+     
 });
 app.listen(PORT, () => console.log('Server running on http://localhost:5000'));
