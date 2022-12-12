@@ -23,4 +23,29 @@ app.get('/task', async (req, res) => {
     res.status(500).send({ error });
   }
 });
+
+app.post("/task", async (req, res) => {
+
+    try{
+      const task = req.body;
+
+    const listBuffer = await fs.readFile("./tasks.json");
+    const currentTasks = JSON.parse(listBuffer);
+    let maxTaskId = 1;
+    if(currentTasks && currentTasks.length > 0) {
+        maxTaskId = currentTasks.reduce((maxId , currentElement) => currentElement.id > maxId ? currentElement.id : maxId ,
+        maxTaskId
+        );
+    }
+
+    const newTask = { id: maxTaskId + 1, ...task };
+    const newList = currentTasks ? [...currentTasks, newTask] : [newTask];
+    console.log(newList);
+
+    await fs.writeFile('./tasks.json', JSON.stringify(newList));
+    res.send(newTask);
+  } catch(error){
+        res.status(500).send({ error });
+     }
+});
 app.listen(PORT, () => console.log('Server running on http://localhost:5000'));
