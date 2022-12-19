@@ -34,9 +34,24 @@
                             name="description" 
                             class="resize-none w-full rounded-md border-yellow-500 border-2 focus-within:outline-none focus:border-yellow-600 px-4 py-2"  ></textarea>
                     </section>
+                    <section class="mb-2">
+                    <label class="block pr-5 mb-2 text-xl" for="title">Utfört senast</label>
+                        <p class="message text-sm text-red-700 mb-2 hidden" >Error message </p>
+                        <input 
+                            type="date"
+                            id="dueDate"
+                            name="dueDate" 
+                            class="w-full rounded-md border-yellow-500 border-2 focus-within:outline-none focus:border-yellow-600 px-4 py-2" >
+                    </section>
+                    <button name="submitTodoForm" class="rounded-md bg-yellow-500 hover:bg-yellow-400 px-4 py-1" type="submit">
+                        Spara
+                    </button>
                 </form>
             </section>
-            <section></section>  
+            <section class="flex-1 px-5">
+                <h2 class="mb-6 text-3xl text-orange-900">Alla uppgifter</h2>
+                <ul id="todoList"></ul>
+            </section>  
         </section>     
     </main>
 </body>
