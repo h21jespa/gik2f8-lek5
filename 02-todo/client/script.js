@@ -11,6 +11,8 @@ let titleValid = true;
 let descriptionValid = true;
 let dueDateValid = true;
 
+const api = new Api('localhost:5000/tasks');
+
 function validateField(field) {
     const {name, value} = field;
     let = validationMessage = "";
@@ -47,7 +49,26 @@ function validateField(field) {
 
  }
  
-
+ 
 function onSubmit(e) {
     e.preventDefault();
+
+    if(titleValid && descriptionValid && dueDateValid) {
+        console.log('submit');
+        saveTask();
+    }
+
+    
+    function saveTask() {
+        const task = {
+            title: todoForm.title.value,
+            description: todoForm.description.value,
+            dueDate: todoForm.dueDate.value,
+            completed: false
+        };
+        
+        api.create(task);
+
+
+    }
 }
