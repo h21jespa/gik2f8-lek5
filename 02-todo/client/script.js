@@ -65,6 +65,14 @@ function onSubmit(e) {
       completed: false,
     };
 
-    api.create(task);
+    api.create(task).then((task) => {
+      if (task) {
+        render();
+      }
+    });
   }
+}
+
+function render() {
+  console.log("rendering");
 }

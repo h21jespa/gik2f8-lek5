@@ -19,9 +19,10 @@ class Api {
 
     console.log(request);
 
-    fetch(request)
+    return fetch(request)
       .then((result) => result.json())
-      .then((data) => console.log(data));
+      .then((data) => data)
+      .catch((err) => console.log(err));
   }
 
   getAll() {}
