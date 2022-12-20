@@ -65,28 +65,28 @@ function onSubmit(e) {
     console.log("submit");
     saveTask();
   }
+}
 
-  function saveTask() {
-    const task = {
-      title: todoForm.title.value,
-      description: todoForm.description.value,
-      dueDate: todoForm.dueDate.value,
-      completed: false,
-    };
+function saveTask() {
+  const task = {
+    title: todoForm.title.value,
+    description: todoForm.description.value,
+    dueDate: todoForm.dueDate.value,
+    completed: false,
+  };
 
-    api.create(task).then((task) => {
-      if (task) {
-        renderList();
-      }
-    });
-  }
+  api.create(task).then((task) => {
+    if (task) {
+      renderList();
+    }
+  });
 }
 
 function renderList() {
   console.log("rendering");
   api.getAll().then((tasks) => {
+    todoListElement.innerHTML = "";
     if (tasks && tasks.length > 0) {
-      todoListElement.innerHTML = "";
       tasks.forEach((task) => {
         todoListElement.insertAdjacentHTML("beforeend", renderTask(task));
       });
@@ -100,7 +100,7 @@ function renderTask({ id, title, description, dueDate }) {
   <div class="flex items-center">
   <h3 class="mb-3 flex-1 text-xl font-bold text-pink-800 uppercase">${title}</h3>
   <div><span>${dueDate}</span>
-  <button class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-6 py-1 rounded-md ml-2">Ta bort </button>
+  <button onclick="deleteTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-6 py-1 rounded-md ml-2">Ta bort </button>
   </div>
   </div>`;
   description &&
@@ -112,6 +112,11 @@ function renderTask({ id, title, description, dueDate }) {
   </li>`;
 
   return html;
+}
+function deleteTask(id) {
+  api.remove(id).then((result) => {
+    renderList();
+  });
 }
 
 renderList();
