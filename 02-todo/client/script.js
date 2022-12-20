@@ -7,6 +7,8 @@ todoForm.dueDate.addEventListener("blur", (e) => validateField(e.target));
 
 todoForm.addEventListener("submit", onSubmit);
 
+const todoListElement = document.getElementById("todoList");
+
 let titleValid = true;
 let descriptionValid = true;
 let dueDateValid = true;
@@ -25,6 +27,8 @@ function validateField(field) {
         titleValid = false;
         validationMessage =
           "Fältet 'Titel' får inte innehålla mer än 100 tecken";
+      } else {
+        titleValid = true;
       }
       break;
     }
@@ -34,6 +38,8 @@ function validateField(field) {
         descriptionValid = false;
         validationMessage =
           "Fältet 'beskrivning' får inte innehålla mer än 100 tecken";
+      } else {
+        descriptionValid = true;
       }
       break;
     }
@@ -41,7 +47,10 @@ function validateField(field) {
       if (value.length == 0) {
         descriptionValid = false;
         validationMessage = "Fältet 'Slutförd senast' är obligatorisk";
+      } else {
+        dueDateValid = true;
       }
+
       break;
     }
   }
@@ -67,12 +76,42 @@ function onSubmit(e) {
 
     api.create(task).then((task) => {
       if (task) {
-        render();
+        renderList();
       }
     });
   }
 }
 
-function render() {
+function renderList() {
   console.log("rendering");
+  api.getAll().then((tasks) => {
+    if (tasks && tasks.length > 0) {
+      todoListElement.innerHTML = "";
+      tasks.forEach((task) => {
+        todoListElement.insertAdjacentHTML("beforeend", renderTask(task));
+      });
+    }
+  });
 }
+
+function renderTask({ id, title, description, dueDate }) {
+  let html = `
+  <li class="select-none mt-2 py-2 border-b border-amber-300">
+  <div class="flex items-center">
+  <h3 class="mb-3 flex-1 text-xl font-bold text-pink-800 uppercase">${title}</h3>
+  <div><span>${dueDate}</span>
+  <button class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-6 py-1 rounded-md ml-2">Ta bort </button>
+  </div>
+  </div>`;
+  description &&
+    (html += `
+    <p class= "ml-8 mt-2 text-xs italic">${description}</p>
+`);
+  html += `
+  
+  </li>`;
+
+  return html;
+}
+
+renderList();

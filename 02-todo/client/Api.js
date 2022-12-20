@@ -17,7 +17,6 @@ class Api {
       },
     });
 
-    console.log(request);
 
     return fetch(request)
       .then((result) => result.json())
@@ -25,7 +24,12 @@ class Api {
       .catch((err) => console.log(err));
   }
 
-  getAll() {}
+  getAll() {
+    return fetch(this.url)
+    .then((result => result.json()))
+    .then((data) => data)
+    .catch((err) => console.log(err));
+  }
 
   removeEventListener() {}
 }
